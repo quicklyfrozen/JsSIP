@@ -88,6 +88,15 @@ module.exports = function(grunt) {
         ],
         dest: 'dist/<%= pkg.name %>-<%= pkg.version %>.min.js',
         nonull: true
+      },
+      amd: {
+        src: ['src/intro.js'].concat(srcFiles, ['src/Grammar/dist/Grammar.js', 'src/outro.js']),
+        dest: 'dist/jssip.js',
+        options: {
+          banner: '<%= meta.banner %>',
+          process: true
+        },
+        nonull: true
       }
     },
     includereplace: {
@@ -99,6 +108,11 @@ module.exports = function(grunt) {
       devel: {
         files: {
           'dist': 'dist/<%= pkg.name %>-devel.js'
+        }
+      },
+      amd: {
+        files: {
+          'dist': 'dist/jssip.js'
         }
       }
     },
@@ -200,6 +214,8 @@ module.exports = function(grunt) {
   // Travis CI task.
   // Doc: http://manuel.manuelles.nl/blog/2012/06/22/integrate-travis-ci-into-grunt/
   grunt.registerTask('travis', ['grammar', 'devel', 'test']);
+
+  grunt.registerTask('amd', ['build', 'concat:amd', 'includereplace:amd']);
 
   // Default task is an alias for 'build'.
   grunt.registerTask('default', ['build']);
